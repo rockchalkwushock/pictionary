@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
 let pictionary = () => {
+  let socket = io();
   let canvas, context;
 
   let draw = (position) => {
@@ -19,9 +20,14 @@ let pictionary = () => {
     let position = {x: event.pageX - offset.left,
                     y: event.pageY - offset.top};
     draw(position);
+    socket.emit('draw', position);
   });
+
+
+  socket.on('draw', draw);
 };
 
-$(document).ready(() => {
-  pictionary();
-});
+
+
+
+$(document).ready(pictionary);

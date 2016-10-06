@@ -53,6 +53,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var pictionary = function pictionary() {
+	  var socket = io();
 	  var canvas = void 0,
 	      context = void 0;
 	
@@ -71,12 +72,13 @@
 	    var position = { x: event.pageX - offset.left,
 	      y: event.pageY - offset.top };
 	    draw(position);
+	    socket.emit('draw', position);
 	  });
+	
+	  socket.on('draw', draw);
 	};
 	
-	(0, _jquery2.default)(document).ready(function () {
-	  pictionary();
-	});
+	(0, _jquery2.default)(document).ready(pictionary);
 
 /***/ },
 /* 1 */
