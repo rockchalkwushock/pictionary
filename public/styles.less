@@ -1,0 +1,38 @@
+@blue: #1E2835;
+@red: #F8F8F8;
+@lightblue: #9ABBFF;
+@offwhite: #C7CACD;
+@no_margin: 0, auto;
+@center: center;
+@width: 800px;
+@height: 600px;
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    color: @blue;
+    background-color: @red;
+    font-size: 1.5em;
+}
+
+h1 {
+    background-color: @lightblue
+    margin:  0 0 20px 0;
+    padding: 20px;
+    text-align: @center;
+}
+
+#top-message {
+    text-align: @center;
+    padding: 10px;
+}
+
+canvas {
+    width: @width;
+    height: @height;
+    border: 1px @offwhite solid;
+    display: block;
+    margin: @no_margin;
+}
