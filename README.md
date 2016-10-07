@@ -2,10 +2,8 @@
 Pictionary Game using Socket.io
 
 ## Languages
-#### Front-End
-  - Javascript (ES6)
-#### Back-End
-  - Node.js
+  - Front-End: Javascript (ES6)
+  - Back-End: Node.js
 
 ## Libraries
   - jQuery
