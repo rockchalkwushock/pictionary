@@ -8,19 +8,18 @@ app.use(express.static('build'));
 let server = http.Server(app);
 let io = socket_io(server);
 
+// Listen for Client connecting to the server.
 io.on('connection', (socket) => {
     console.log('Client connected');
-    socket.broadcast.emit('user connected');
 
     // Listen for Draw Event.
     socket.on('draw', (position) => {
        socket.broadcast.emit('draw', position);
    });
 
-   // Listen for User Leaving
+   // Listen for Client leaving the server.
    socket.on('disconnect', () => {
      console.log('Client disconnected');
-     socket.broadcast.emit('user disconnected');
    });
 });
 

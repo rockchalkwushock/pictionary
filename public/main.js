@@ -15,12 +15,23 @@ let pictionary = () => {
   context = canvas[0].getContext('2d');
   canvas[0].width = canvas[0].offsetWidth;
   canvas[0].height = canvas[0].offsetHeight;
+
+  canvas.on('mousedown', (event) => {
+    drawing = true;
+  });
+
+  canvas.on('mouseup', (event) => {
+    drawing = false;
+  });
+
   canvas.on('mousemove', (event) => {
-    let offset = canvas.offset();
-    let position = {x: event.pageX - offset.left,
-                    y: event.pageY - offset.top};
-    draw(position);
-    socket.emit('draw', position);
+    if (drawing) {
+      let offset = canvas.offset();
+      let position = {x: event.pageX - offset.left,
+                      y: event.pageY - offset.top};
+      draw(position);
+      socket.emit('draw', position);
+    }
   });
 
 
