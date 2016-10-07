@@ -52,11 +52,19 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var pictionary = function pictionary() {
+	(0, _jquery2.default)(document).ready(function () {
 	  var socket = io();
 	  var canvas = void 0,
-	      context = void 0;
+	      context = void 0,
+	      drawing = void 0;
+	  var displayGuess = (0, _jquery2.default)('#guess-list');
+	  var guessBox = (0, _jquery2.default)('#user-guess');
+	  var guess = (0, _jquery2.default)('#guess');
+	  var wordChoice = (0, _jquery2.default)('#wordChoice span');
+	  var word2draw = (0, _jquery2.default)('#word2draw');
+	  // let clear = $('#clear');
 	
+	  // Function that controls the Drawing action.
 	  var draw = function draw(position) {
 	    context.beginPath();
 	    context.arc(position.x, position.y, 6, 0, 2 * Math.PI);
@@ -67,18 +75,54 @@
 	  context = canvas[0].getContext('2d');
 	  canvas[0].width = canvas[0].offsetWidth;
 	  canvas[0].height = canvas[0].offsetHeight;
-	  canvas.on('mousemove', function (event) {
-	    var offset = canvas.offset();
-	    var position = { x: event.pageX - offset.left,
-	      y: event.pageY - offset.top };
-	    draw(position);
-	    socket.emit('draw', position);
-	  });
+	
+	  var clientAction = function clientAction(data, word) {
+	    if (data.client === 'Drawer') {
+	      canvas.on('mousedown', function (event) {
+	        console.log('mousedown');
+	        drawing = true;
+	      });
+	
+	      canvas.on('mouseup', function (event) {
+	        console.log('mouseup');
+	        drawing = false;
+	      });
+	
+	      canvas.on('mousemove', function (event) {
+	        if (drawing) {
+	          var offset = canvas.offset();
+	          var position = { x: event.pageX - offset.left,
+	            y: event.pageY - offset.top };
+	          draw(position);
+	          socket.emit('draw', position);
+	        }
+	      });
+	      wordChoice.text(word);
+	    } else {
+	      guessBox.on('keydown', onKeyDown);
+	      guess.show();
+	      (0, _jquery2.default)('#wordChoice').hide();
+	    }
+	  };
+	
+	  var clientGuess = function clientGuess(guess) {
+	    displayGuess.append('<li>' + guess + '</li>');
+	  };
+	
+	  var onKeyDown = function onKeyDown(evet) {
+	    if (event.keyCode !== 13) {
+	      return;
+	    }
+	    var guess = guessBox.val();
+	    console.log(guess);
+	    socket.emit('guess', guess);
+	    guessBox.val('');
+	  };
 	
 	  socket.on('draw', draw);
-	};
-	
-	(0, _jquery2.default)(document).ready(pictionary);
+	  socket.on('guess', clientGuess);
+	  socket.on('clientAction', clientAction);
+	});
 
 /***/ },
 /* 1 */
